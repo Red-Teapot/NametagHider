@@ -13,11 +13,15 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class NametagHiderPlugin extends JavaPlugin implements Listener {
-    private static final String TEAM_NAME = "8d7f6tg8sd6ftg";
+    private String teamName;
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
         getServer().getPluginManager().registerEvents(this, this);
+
+        teamName = getConfig().getString("scoreboardTeam.name");
 
         prepareScoreboardTeam();
     }
@@ -25,12 +29,12 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
     private void prepareScoreboardTeam() {
         final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 
-        Team team = scoreboard.getTeam(TEAM_NAME);
+        Team team = scoreboard.getTeam(teamName);
         if(team == null) {
-            team = scoreboard.registerNewTeam(TEAM_NAME);
+            team = scoreboard.registerNewTeam(teamName);
         }
 
-        team.setDisplayName("NametagHider team used to hide nametags");
+        team.setDisplayName(getConfig().getString("scoreboardTeam.displayName"));
         team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
     }
 
@@ -43,7 +47,7 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evt) {
         final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        scoreboard.getTeam(TEAM_NAME).addEntry(evt.getPlayer().getDisplayName());
+        scoreboard.getTeam(teamName).addEntry(evt.getPlayer().getDisplayName());
     }
 
     @SuppressWarnings("unused")
@@ -52,10 +56,12 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
         if(evt.getRightClicked() instanceof Player) {
             final Player target = (Player) evt.getRightClicked();
             final Player source = evt.getPlayer();
+            final String message = getConfig().getString("nicknameFormat")
+                    .replace("%nickname%", target.getDisplayName());
 
             source.spigot().sendMessage(
                     ChatMessageType.ACTION_BAR,
-                    new TextComponent(target.getDisplayName())
+                    TextComponent.fromLegacyText(message)
             );
         }
     }

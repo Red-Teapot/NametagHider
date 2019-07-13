@@ -1,0 +1,4 @@
+nicknameFormat: '%nickname%'
+scoreboardTeam:
+  name: 'NametagHider'
+  displayName: 'NametagHider team used to hide nametags'
