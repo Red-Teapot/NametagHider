@@ -1,5 +1,6 @@
-name: NametagHider
-version: '0.1'
+# Will be replaced with proper values by Gradle
+name: '${name}'
+version: '${version}'
 main: me.redteapot.nametaghider.NametagHiderPlugin
 description: Hides player name tags and shows nicknames on hotbar after RMB click
 prefix: NametagHider
