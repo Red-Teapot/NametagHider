@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+
+        content {
+            includeGroup 'org.spigotmc'
+        }
+    }
+    maven {
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+configurations {
+    embedded
+    implementation.extendsFrom(embedded)
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.14.3-R0.1-SNAPSHOT'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+jar {
+    from(configurations.embedded.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF'
+    }
+}
