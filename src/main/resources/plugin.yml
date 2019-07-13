@@ -1,0 +1,7 @@
+name: NametagHider
+version: '0.1'
+main: me.redteapot.nametaghider.NametagHiderPlugin
+description: Hides player name tags and shows nicknames on hotbar after RMB click
+prefix: NametagHider
+api-version: '1.14'
+author: RedTeapot <some.redteapot@gmail.com>
