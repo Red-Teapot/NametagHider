@@ -47,7 +47,7 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evt) {
         final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        scoreboard.getTeam(teamName).addEntry(evt.getPlayer().getDisplayName());
+        scoreboard.getTeam(teamName).addEntry(evt.getPlayer().getName());
     }
 
     @SuppressWarnings("unused")
