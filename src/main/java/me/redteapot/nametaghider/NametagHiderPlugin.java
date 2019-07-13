@@ -3,18 +3,35 @@ package me.redteapot.nametaghider;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class NametagHiderPlugin extends JavaPlugin implements Listener {
+    private static final String TEAM_NAME = "8d7f6tg8sd6ftg";
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
+
+        prepareScoreboardTeam();
+    }
+
+    private void prepareScoreboardTeam() {
+        final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+
+        Team team = scoreboard.getTeam(TEAM_NAME);
+        if(team == null) {
+            team = scoreboard.registerNewTeam(TEAM_NAME);
+        }
+
+        team.setDisplayName("NametagHider team used to hide nametags");
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
     }
 
     @Override
@@ -25,16 +42,21 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
     @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evt) {
-        getLogger().info("Player login: " + evt.getPlayer().getDisplayName());
+        final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        scoreboard.getTeam(TEAM_NAME).addEntry(evt.getPlayer().getDisplayName());
     }
 
     @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent evt) {
-        getLogger().info("Player interact entity: " + evt.getPlayer().getDisplayName() + " -> " + evt.getRightClicked().getClass().getName());
-        evt.getPlayer().spigot().sendMessage(
-                ChatMessageType.ACTION_BAR,
-                new TextComponent("Keke: " + evt.getRightClicked().getClass().getName())
-        );
+        if(evt.getRightClicked() instanceof Player) {
+            final Player target = (Player) evt.getRightClicked();
+            final Player source = evt.getPlayer();
+
+            source.spigot().sendMessage(
+                    ChatMessageType.ACTION_BAR,
+                    new TextComponent(target.getDisplayName())
+            );
+        }
     }
 }
