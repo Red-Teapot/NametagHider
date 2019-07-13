@@ -4,6 +4,10 @@ plugins {
     id 'eclipse'
 }
 
+archivesBaseName = project.archives_base_name
+version = project.version
+group = project.group
+
 repositories {
     jcenter()
     mavenCentral()
@@ -19,19 +23,8 @@ repositories {
     }
 }
 
-configurations {
-    embedded
-    implementation.extendsFrom(embedded)
-}
-
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.14.3-R0.1-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
-}
-
-jar {
-    from(configurations.embedded.collect { it.isDirectory() ? it : zipTree(it) }) {
-        exclude 'META-INF'
-    }
 }
