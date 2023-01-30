@@ -36,6 +36,7 @@ public class NametagHiderPlugin extends JavaPlugin implements Listener {
 
         team.setDisplayName(getConfig().getString("scoreboardTeam.displayName"));
         team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+        team.setCanSeeFriendlyInvisibles(false);
     }
 
     @Override
